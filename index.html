@@ -76,7 +76,7 @@
     .kiss-image{width:80px;height:auto;opacity:0.9;transform:rotate(-5deg)}
     @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-    /* glitter background */
+    /* glitter background (sparks) */
     .glitter{position:absolute;inset:0;pointer-events:none;opacity:0.9;z-index:1}
     .spark{
       position:absolute;width:6px;height:6px;background:linear-gradient(45deg,#000000,var(--matte-gold));
@@ -160,12 +160,78 @@
 
         <!-- Final note: text + kiss image side by side -->
         <div class="final-note">
-          <div class="kiss-text">Жду тебя! </div>
+          <div class="kiss-text">Жду тебя!</div>
           <img src="kiss.png" alt="Kiss" class="kiss-image">
         </div>
       </div>
-    </div>            
+
+      <!-- glitter background container -->
+      <div class="glitter" id="glitter" aria-hidden="true"></div>
+
+    </div>
   </div>
+
+  <script>
+    (function(){
+      // Countdown logic
+      const daysEl = document.getElementById('days');
+      const hoursEl = document.getElementById('hours');
+      const minutesEl = document.getElementById('minutes');
+      const secondsEl = document.getElementById('seconds');
+
+      // 11 декабря 2025, 17:00 локально
+      const target = new Date("2025-12-11T17:00:00").getTime();
+      const pad2 = n => String(n).padStart(2,'0');
+
+      function tick(){
+        const now = Date.now();
+        const diff = target - now;
+
+        if(diff <= 0){
+          daysEl.textContent = "00";
+          hoursEl.textContent = "00";
+          minutesEl.textContent = "00";
+          secondsEl.textContent = "00";
+          return;
+        }
+
+        const d = Math.floor(diff / (1000*60*60*24));
+        const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+        const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+        const s = Math.floor((diff % (1000*60)) / 1000);
+
+        daysEl.textContent = pad2(d);
+        hoursEl.textContent = pad2(h);
+        minutesEl.textContent = pad2(m);
+        secondsEl.textContent = pad2(s);
+      }
+
+      tick();
+      setInterval(tick, 1000);
+
+      // Glitter (sparks) generator
+      const parent = document.getElementById('glitter');
+      if(parent){
+        const COUNT = 24;
+        for(let i=0;i<COUNT;i++){
+          const el = document.createElement('div');
+          el.className = 'spark';
+          // random start positions
+          el.style.left = (Math.random()*100).toFixed(2) + '%';
+          el.style.top = (Math.random()*100).toFixed(2) + '%';
+          // random size and opacity
+          const size = 3 + Math.random()*8;
+          el.style.width = size + 'px';
+          el.style.height = size + 'px';
+          el.style.opacity = (0.08 + Math.random()*0.16).toFixed(2);
+          // random animation duration and slight delay
+          el.style.animationDuration = (5 + Math.random()*8).toFixed(2) + 's';
+          el.style.animationDelay = (Math.random()*3).toFixed(2) + 's';
+          parent.appendChild(el);
+        }
+      }
+    })();
+  </script>
 </body>
-</html> 
+</html>
 
