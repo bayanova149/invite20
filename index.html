@@ -52,25 +52,45 @@
     .desc{margin-top:12px;line-height:1.45}
 
     /* instagram panel */
-    .insta-panel {
-  width:100vw;
-  height:100vh;
-  margin:0;
-  padding:0;
-  border-radius:0;
-}
-.insta-frame {
-  width:100%;
-  height:100%;
-  border:none;
-  border-radius:0;
+.insta-panel {
+  margin-top:20px;
+  padding:14px;
+  background:rgba(255,255,255,0.6);
+  border-radius:14px;
+  box-shadow:none;
 }
 
-    .insta-fallback{text-align:center;font-size:13px;margin-top:10px}
-    .insta-link{
-      display:inline-block;margin-top:6px;padding:8px 12px;border-radius:10px;
-      background:var(--matte-gold);color:#fff;font-size:13px;text-decoration:none;
-    }
+.insta-panel h3 {
+  color:var(--matte-gold);
+  font-size:17px;
+  margin-bottom:8px;
+  text-align:center;
+}
+
+.insta-frame {
+  width:100%;
+  height:280px; /* ← старый размер */
+  border:none;
+  overflow:hidden;
+  border-radius:12px;
+}
+
+.insta-fallback {
+  text-align:center;
+  font-size:13px;
+  margin-top:10px;
+}
+
+.insta-link {
+  display:inline-block;
+  margin-top:6px;
+  padding:8px 12px;
+  border-radius:10px;
+  background:var(--matte-gold);
+  color:#fff;
+  font-size:13px;
+  text-decoration:none;
+}
 
     /* countdown */
     .countdown-title{margin-top:20px;font-size:16px;font-weight:700;color:var(--matte-gold);text-align:center}
