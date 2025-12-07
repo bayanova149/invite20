@@ -41,9 +41,17 @@
     .details{padding:18px;border-radius:12px;background:rgba(255,255,255,0.4);text-align:left}
     .detail-row{display:flex;gap:12px;margin:10px 0}
     .icon{
-      width:40px;height:40px;border-radius:10px;background:var(--matte-gold);
-      display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;
-    }
+  width:40px;
+  height:40px;
+  border-radius:10px;
+  background: var(--matte-gold);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px; /* увеличиваем эмодзи */
+  line-height:1;   /* убираем лишнее пространство */
+}
+
     .muted{font-size:14px;color:#111}
     .desc{margin-top:12px;line-height:1.45}
 
@@ -112,7 +120,11 @@
       .seg{min-width:56px;padding:10px 12px}
       .kiss-text{font-size:22px}
       .kiss-image{width:70px}
-
+        .icon {
+          width:36px;
+          height:36px;
+          font-size:20px;
+       }
       .insta-panel{
         margin-left:-10px;
         margin-right:-10px;
@@ -165,7 +177,8 @@
             </div>
           </div>
           <p class="desc">Dress code: блеск, шик и уверенность — твой главный аксессуар.</p>
-          <p class="desc">Прошу написать письмо имениннице — главное искренность 💌</p>
+          <p class="desc" style="font-weight:700">Прошу написать письмо имениннице — главное искренность 💌</p>
+
 
           <!-- Instagram panel -->
           <div class="insta-panel">
@@ -183,7 +196,7 @@
         <!-- Countdown -->
         <div class="countdown-title">До праздника осталось</div>
         <div class="countdown" aria-live="polite">
-          <div class="seg"><div class="num" id="days">00</div><div class="lbl">Дней</div></div>
+          <div class="seg"><div class="num" id="days">00</div><div class="lbl">Дня</div></div>
           <div class="seg"><div class="num" id="hours">00</div><div class="lbl">Часов</div></div>
           <div class="seg"><div class="num" id="minutes">00</div><div class="lbl">Минут</div></div>
           <div class="seg"><div class="num" id="seconds">00</div><div class="lbl">Сек</div></div>
