@@ -21,11 +21,15 @@
       color:#111;
     }
     .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px}
-    .invite{
-      max-width:760px;width:100%;background: var(--bg-1);
-      border-radius:20px;box-shadow:0 6px 18px #fff, 0 0 120px var(--gold-glow) inset;
-      padding:30px;position:relative;overflow:hidden;
-    }
+    .invite {
+  width:100vw;   /* ширина = вся ширина окна */
+  height:100vh;  /* высота = вся высота окна */
+  max-width:none; /* убираем ограничение */
+  border-radius:0; /* убираем скругления, чтобы блок был цельным */
+  padding:30px;
+  position:relative;
+  overflow:auto; /* чтобы можно было скроллить, если контента больше */
+}
 
     /* hero */
     .hero{text-align:center;position:relative;z-index:2}
