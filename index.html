@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Birthday party</title>
 
-<!-- Playfair Display (дорогой, модный) -->
+<!-- Playfair Display -->
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&display=swap" rel="stylesheet">
 
 <style>
@@ -106,12 +106,11 @@ html,body{
   padding:18px;
   position:relative;
   border: 1px solid rgba(170,42,31,0.08);
-  box-shadow: 0 8px 28px rgba(255,255,255,0.6), 0 0 30px rgba(255, 255, 255, 0.668) inset;
+  box-shadow: 0 8px 28px rgba(255,255,255,0.6), 0 0 30px rgba(255, 255, 255,0.668) inset;
   backdrop-filter: blur(6px) saturate(120%);
   -webkit-backdrop-filter: blur(6px) saturate(120%);
   overflow:hidden;
 }
-
 
 .panel:before{
   content:"";
@@ -157,23 +156,21 @@ html,body{
 .guest-item:last-child{border-bottom:0}
 .guest-meta{font-size:12px;color:#111}
 
-/* glitter (subtle) */
+/* glitter */
 .glitter{position:absolute;inset:0;pointer-events:none;opacity:0.9}
 .spark{position:absolute;width:6px;height:6px;background:linear-gradient(45deg,#000000,var(--matte-gold));opacity:0.14;border-radius:50%;filter:blur(1px);animation:float 7s linear infinite}
 @keyframes float{0%{transform:translateY(0) scale(0.6);opacity:0}10%{opacity:1}50%{transform:translateY(-220px) scale(1)}100%{transform:translateY(20px);opacity:0}}
 
-/* responsive */
 @media(max-width:980px){.invite{grid-template-columns:1fr;max-width:760px}.panel{order:2}}
 @media(max-width:540px){.title{font-size:28px}.panel{padding:14px}.invite{padding:18px}}
 </style>
-
 </head>
-<body>
 
+<body>
 <div class="wrap">
   <div class="invite">
 
-    <!-- LEFT: Hero / Details -->
+    <!-- LEFT -->
     <div class="hero">
       <img src="December.png" alt="Приглашение" class="hero-image">
       <div class="logo">Glam &amp; Glow</div>
@@ -207,11 +204,11 @@ html,body{
         </div>
 
         <p class="desc">Dress code: блеск, шик и уверенность — твой главный аксессуар. Атмосфера обещает быть уютной и праздничной.</p>
-        <p class="desc">Но! В дополение прошу написать письмо именинице) Содержание на твоё усмотрение, главное- искренность</p>
+        <p class="desc">Но! В дополение прошу написать письмо именинице) Содержание на твоё усмотрение, главное — искренность</p>
       </div>
     </div>
 
-    <!-- RIGHT: Premium Panel -->
+    <!-- RIGHT -->
     <div class="panel" aria-live="polite">
       <div class="heading">
         <div class="small">Приглашение</div>
@@ -226,17 +223,15 @@ html,body{
         <div class="seg"><div class="num" id="seconds">00</div><div class="lbl">Сек</div></div>
       </div>
 
-      <!-- FORM -->
+      <!-- RSVP FORM -->
       <div class="rsvp" role="form" aria-label="RSVP форма">
         <input class="input" id="rsvpName" placeholder="Ваше имя" autocomplete="name" />
         <input class="input" id="rsvpGuests" placeholder="Количество гостей" inputmode="numeric" />
         <textarea class="input" id="rsvpNote" rows="3" placeholder="Комментарий (по желанию)"></textarea>
-
         <div style="display:flex;gap:10px;margin-top:6px">
-          <button class="btn btn-primary" id="rsvpSend" type="button" aria-label="Отправить">Отправить</button>
-          <button class="btn btn-ghost" id="rsvpMaybe" type="button" aria-label="Возможно приду">Возможно приду</button>
+          <button class="btn btn-primary" id="rsvpSend" type="button">Отправить</button>
+          <button class="btn btn-ghost" id="rsvpMaybe" type="button">Возможно приду</button>
         </div>
-
         <div class="small-muted" id="rsvpMsg" aria-live="polite" style="min-height:20px"></div>
       </div>
 
@@ -249,19 +244,29 @@ html,body{
         </div>
       </div>
 
-      <!-- Guests -->
+      <!-- Guest list -->
       <div class="guest-list" id="guestList" aria-live="polite"></div>
 
-      <!-- soft glitter -->
+      <!-- Comments GitHub -->
+      <div style="margin-top:20px">
+        <h2>Оставьте комментарий</h2>
+        <input type="text" id="name" class="input" placeholder="Ваше имя">
+        <textarea id="comment" class="input" placeholder="Ваш комментарий"></textarea>
+        <button class="btn btn-primary" id="sendComment">Отправить</button>
+        <div id="commentsContainer" class="guest-list"></div>
+      </div>
+
+      <!-- Glitter -->
       <div class="glitter" id="glitter" aria-hidden="true"></div>
     </div>
 
   </div>
 </div>
 
+<!-- SCRIPT -->
 <script>
 (function(){
-  // безопасные селекторы
+  // Countdown
   const daysEl = document.getElementById('days');
   const hoursEl = document.getElementById('hours');
   const minutesEl = document.getElementById('minutes');
@@ -273,68 +278,47 @@ html,body{
   const rsvpSend = document.getElementById('rsvpSend');
   const rsvpMaybe = document.getElementById('rsvpMaybe');
   const rsvpMsg = document.getElementById('rsvpMsg');
-
   const copyLinkBtn = document.getElementById('copyLink');
   const showGuestsBtn = document.getElementById('showGuests');
   const guestListBox = document.getElementById('guestList');
 
-  // TARGET DATE (точное время)
-  const target = new Date("2025-12-11T17:30:00").getTime();
+  const targetDate = new Date(2025,11,11,17,30,0); // 11 декабря 2025 17:30
 
-  function tick() {
+  function tick(){
     const now = new Date();
-
-    // День до конца месяца
-const targetDate = new Date(2025, 11, 11); // месяц 11 = декабрь (0–11)
-const diffTime = targetDate - now; // разница в миллисекундах
-const remainingDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // переводим в дни
-
-
+    const diffTime = targetDate - now;
+    const remainingDays = Math.ceil(diffTime / (1000*60*60*24));
     const h = now.getHours();
     const m = now.getMinutes();
     const s = now.getSeconds();
 
-    daysEl.textContent = String(remainingDays).padStart(2, '0');
-    hoursEl.textContent = String(h).padStart(2, '0');
-    minutesEl.textContent = String(m).padStart(2, '0');
-    secondsEl.textContent = String(s).padStart(2, '0');
-}
+    daysEl.textContent = String(remainingDays).padStart(2,'0');
+    hoursEl.textContent = String(h).padStart(2,'0');
+    minutesEl.textContent = String(m).padStart(2,'0');
+    secondsEl.textContent = String(s).padStart(2,'0');
+  }
+  tick(); setInterval(tick,1000);
 
-tick();
-setInterval(tick, 1000);
-
-
-  // save to localStorage
+  // Save RSVP
   function saveGuest(name, guests, note, maybe=false){
     const arr = JSON.parse(localStorage.getItem('guestList')||'[]');
-    arr.push({
-      name: name,
-      guests: guests || "1",
-      note: note || "",
-      maybe: !!maybe,
-      time: new Date().toLocaleString()
-    });
+    arr.push({name, guests: guests||"1", note: note||"", maybe:!!maybe, time:new Date().toLocaleString()});
     localStorage.setItem('guestList', JSON.stringify(arr));
   }
 
-  // feedback helper
-  function flashMessage(el, text, ok=true){
+  function flashMessage(el, text){
     el.textContent = text;
-    el.style.opacity = '1';
-    setTimeout(()=>{ if(el) el.style.opacity='0.9'; }, 10);
-    // soft clear after short time
-    setTimeout(()=>{ if(el) el.textContent=''; }, 4200);
+    el.style.opacity='1';
+    setTimeout(()=>{ el.style.opacity='0.9'; },10);
+    setTimeout(()=>{ el.textContent=''; },4200);
   }
 
-  // rsvpSend handler
-  rsvpSend.addEventListener('click', ()=> {
+  rsvpSend.addEventListener('click',()=>{
     const name = rsvpName.value.trim();
-    if(!name){ flashMessage(rsvpMsg, 'Введите имя, пожалуйста'); rsvpName.focus(); return; }
-    saveGuest(name, rsvpGuests.value.trim(), rsvpNote.value.trim(), false);
-    flashMessage(rsvpMsg, 'Спасибо! RSVP отправлен ');
-    // лёгкая очистка полей (оставляем имя чтобы можно было редактировать)
-    rsvpGuests.value = '';
-    rsvpNote.value = '';
+    if(!name){ flashMessage(rsvpMsg,'Введите имя, пожалуйста'); rsvpName.focus(); return;}
+    saveGuest(name,rsvpGuests.value.trim(),rsvpNote.value.trim(),false);
+    flashMessage(rsvpMsg,'Спасибо! RSVP отправлен');
+    rsvpGuests.value=''; rsvpNote.value='';
   });
 
   rsvpMaybe.addEventListener('click', ()=>{
