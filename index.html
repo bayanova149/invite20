@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Birthday party — 20 лет (Luxury Gold)</title>
+
+<!-- Playfair Display (дорогой, модный) -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+.hero-image { 
+  width: 80%;             
+  max-width: 350px;       
+  height: auto;           
+  border-radius: 16px;    
+  margin: 0 auto 20px;    
+  box-shadow: 0 8px 24px rgba(230,230,223,0.5); 
+  object-fit: cover;      
+  display: block;         
+}
+
+:root{
+  --bg-1: #E6E6DF;
+  --bg-2: #E6E6DF;
+  --panel-bg: rgba(0,0,0,0.03);   
+  --matte-gold: #aa2a1f;                
+  --gold-glow: rgba(170,42,31,0.14);   
+  --muted: #111;
+  --glass: rgba(0,0,0,0.02);
+  --radius: 16px;
+  --accent-strong: #aa2a1f;             
+  --transition: 240ms cubic-bezier(.2,.9,.3,1);
+}
+
+/* MOBILE FIXES */
+@media(max-width:700px){
+  .wrap{padding:16px !important;}
+  .invite{padding:18px !important;gap:16px !important;}
+  .hero{padding:0 !important;}
+  .logo{font-size:16px !important;text-align:center !important;}
+  .title{font-size:26px !important;text-align:center !important;margin-bottom:6px !important;}
+  .subtitle{font-size:14px !important;text-align:center !important;margin-bottom:8px !important;}
+  .details{padding:14px !important;border-radius:12px !important;}
+  .detail-row{gap:10px !important;margin:8px 0 !important;}
+  .icon{width:32px !important;height:32px !important;font-size:16px !important;border-radius:8px !important;}
+  .panel{padding:16px !important;border-radius:14px !important;}
+  .panel .heading .small{font-size:12px !important;}
+  .panel .heading .big{font-size:18px !important;text-align:center !important;}
+  .countdown{gap:8px !important;}
+  .seg{min-width:52px !important;padding:10px !important;border-radius:8px !important;}
+  .num{font-size:18px !important;}
+  .lbl{font-size:10px !important;}
+  .input{padding:10px !important;font-size:14px !important;}
+  .btn{padding:10px 12px !important;font-size:14px !important;}
+  .guest-list{max-height:200px !important;}
+}
+
+*{box-sizing:border-box}
+html,body{
+  height:100%;
+  margin:0;
+  font-family:'Playfair Display', Georgia, "Times New Roman", serif;
+  background: #E6E6DF;
+  color:#111;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+.wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px}
+
+/* Карточка приглашения */
+.invite{
+  width:100%;
+  max-width:1080px;
+  border-radius:20px;
+  padding:30px;
+  display:grid;
+  grid-template-columns:1fr 420px;
+  gap:28px;
+  background: #E6E6DF;
+  box-shadow: 0 6px 18px rgb(255, 255, 255), 0 0 120px var(--gold-glow) inset;
+  border-radius:calc(var(--radius) + 4px);
+  position:relative;
+  overflow:visible;
+  border:1px solid rgba(221, 220, 220, 0.02);
+}
+
+/* LEFT: HERO */
+.hero{padding:14px 18px}
+.logo{font-weight:700;font-size:18px;color:var(--matte-gold);letter-spacing:1px}
+.title{font-size:48px;margin:6px 0 2px;color:#111;line-height:1.02;letter-spacing:0.2px}
+.subtitle{color:#111;font-size:15px;margin-bottom:14px;font-weight:400}
+
+/* details */
+.details{background:linear-gradient(180deg, rgba(0,0,0,0.01), rgba(0,0,0,0.008));padding:18px;border-radius:12px;border:1px solid rgba(0,0,0,0.02)}
+.detail-row{display:flex;align-items:center;gap:12px;margin:10px 0}
+.icon{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--matte-gold),hwb(0 22% 32%));display:flex;align-items:center;justify-content:center;color:#111;font-weight:700;box-shadow:0 4px 18px rgba(0,0,0,0.5)}
+.muted{color:#111;font-size:14px}
+.desc{margin-top:12px;color:#111;line-height:1.45}
+
+/* RIGHT: panel */
+.panel{
+  background: rgba(255,255,255,0.3); /* светлый фон вместо темного */
+  border-radius:14px;
+  padding:18px;
+  position:relative;
+  border: 1px solid rgba(170,42,31,0.08);
+  box-shadow: 0 8px 28px rgba(255,255,255,0.6), 0 0 30px rgba(255, 255, 255, 0.668) inset;
+  backdrop-filter: blur(6px) saturate(120%);
+  -webkit-backdrop-filter: blur(6px) saturate(120%);
+  overflow:hidden;
+}
+
+
+.panel:before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius:16px;
+  pointer-events:none;
+  background:linear-gradient(90deg, transparent, rgba(0,0,0,0.25));
+  box-shadow: 0 0 40px var(--gold-glow);
+  mask: linear-gradient(#000 0 0);
+}
+
+/* заголовок панели */
+.panel .heading{display:flex;flex-direction:column;align-items:center;margin-bottom:12px}
+.panel .heading .small{font-size:13px;color:var(--matte-gold);font-weight:700}
+.panel .heading .big{font-size:20px;font-weight:800;color:#000000;margin-top:6px}
+
+/* таймер */
+.countdown{display:flex;gap:12px;justify-content:center;margin-bottom:14px}
+.seg{background:rgba(0,0,0,0.01);padding:12px 14px;border-radius:10px;min-width:64px;text-align:center;border:1px solid rgba(0,0,0,0.02)}
+.num{font-size:20px;font-weight:800;color:var(--matte-gold)}
+.lbl{font-size:11px;color:#111;letter-spacing:0.6px}
+
+/* RSVP form */
+.rsvp{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.input{padding:12px;border-radius:10px;border:1px solid rgba(0,0,0,0.03);background:transparent;color:#111;font-size:14px;outline:none}
+.input::placeholder{color:rgba(0,0,0,0.45)}
+.row{display:flex;gap:8px}
+.btn{padding:10px 16px;border-radius:999px;border:0;cursor:pointer;font-weight:700;font-family:'Playfair Display', serif;transition:var(--transition)}
+.btn-primary{
+  background:linear-gradient(180deg,var(--matte-gold),var(--accent-strong));
+  color:#ffffff;
+  box-shadow:0 6px 18px rgba(247, 247, 247, 0.979), 0 1px 0 rgba(0,0,0,0.04) inset;
+  transform:translateY(0);
+}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(170,42,31,0.12)}
+.btn-ghost{background:transparent;border:1px solid rgba(0,0,0,0.04);color:#111}
+.small-muted{font-size:13px;color:#111;margin-top:6px}
+
+/* guest list */
+.guest-list{margin-top:16px;padding:12px;background:rgba(255, 255, 255, 0.015);border-radius:10px;display:none;max-height:280px;overflow:auto;border:1px solid rgba(0,0,0,0.02)}
+.guest-item{padding:8px 6px;border-bottom:1px solid rgba(252, 252, 252, 0.02)}
+.guest-item:last-child{border-bottom:0}
+.guest-meta{font-size:12px;color:#111}
+
+/* glitter (subtle) */
+.glitter{position:absolute;inset:0;pointer-events:none;opacity:0.9}
+.spark{position:absolute;width:6px;height:6px;background:linear-gradient(45deg,#000000,var(--matte-gold));opacity:0.14;border-radius:50%;filter:blur(1px);animation:float 7s linear infinite}
+@keyframes float{0%{transform:translateY(0) scale(0.6);opacity:0}10%{opacity:1}50%{transform:translateY(-220px) scale(1)}100%{transform:translateY(20px);opacity:0}}
+
+/* responsive */
+@media(max-width:980px){.invite{grid-template-columns:1fr;max-width:760px}.panel{order:2}}
+@media(max-width:540px){.title{font-size:28px}.panel{padding:14px}.invite{padding:18px}}
+</style>
+
+</head>
+<body>
+
+<div class="wrap">
+  <div class="invite">
+
+    <!-- LEFT: Hero / Details -->
+    <div class="hero">
+      <img src="December.png" alt="Приглашение" class="hero-image">
+      <div class="logo">Glam &amp; Glow</div>
+      <div class="title">It's my birthday ta daa</div>
+      <div class="subtitle">Приглашаю на вечер стиля, блеска и хорошего настроения</div>
+
+      <div class="details">
+        <div class="detail-row">
+          <div class="icon">📍</div>
+          <div>
+            <div class="muted">Место</div>
+            <div style="font-weight:700">Da Vinci — Проспект Нурсултана Назарбаева, 21, Караганда</div>
+            <a href="https://www.instagram.com/da_vinci_restobar" target="_blank" style="color:var(--matte-gold);font-size:13px;text-decoration:none;display:inline-block;margin-top:6px;">Instagram кафе Da Vinci</a>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="icon">📅</div>
+          <div>
+            <div class="muted">Дата</div>
+            <div style="font-weight:700">11 декабря 2025</div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="icon">⏰</div>
+          <div>
+            <div class="muted">Время</div>
+            <div style="font-weight:700">17:00</div>
+          </div>
+        </div>
+
+        <p class="desc">Dress code: блеск, шик и уверенность — твой главный аксессуар. Атмосфера обещает быть уютной и праздничной.</p>
+        <p class="desc">Но! В дополение прошу написать письмо именинице) Содержание на твоё усмотрение, главное- искренность</p>
+      </div>
+    </div>
+
+    <!-- RIGHT: Premium Panel -->
+    <div class="panel" aria-live="polite">
+      <div class="heading">
+        <div class="small">Приглашение</div>
+        <div class="big">Join Aidana’s Birthday Celebration</div>
+      </div>
+
+      <!-- TIMER -->
+      <div class="countdown" aria-hidden="false">
+        <div class="seg"><div class="num" id="days">00</div><div class="lbl">Дней</div></div>
+        <div class="seg"><div class="num" id="hours">00</div><div class="lbl">Часов</div></div>
+        <div class="seg"><div class="num" id="minutes">00</div><div class="lbl">Минут</div></div>
+        <div class="seg"><div class="num" id="seconds">00</div><div class="lbl">Сек</div></div>
+      </div>
+
+      <!-- FORM -->
+      <div class="rsvp" role="form" aria-label="RSVP форма">
+        <input class="input" id="rsvpName" placeholder="Ваше имя" autocomplete="name" />
+        <input class="input" id="rsvpGuests" placeholder="Количество гостей" inputmode="numeric" />
+        <textarea class="input" id="rsvpNote" rows="3" placeholder="Комментарий (по желанию)"></textarea>
+
+        <div style="display:flex;gap:10px;margin-top:6px">
+          <button class="btn btn-primary" id="rsvpSend" type="button" aria-label="Отправить RSVP">Отправить RSVP</button>
+          <button class="btn btn-ghost" id="rsvpMaybe" type="button" aria-label="Возможно приду">Возможно приду</button>
+        </div>
+
+        <div class="small-muted" id="rsvpMsg" aria-live="polite" style="min-height:20px"></div>
+      </div>
+
+      <!-- Extra controls -->
+      <div style="margin-top:14px">
+        <div class="small-muted">Дополнительно</div>
+        <div style="display:flex;gap:10px;margin-top:8px">
+          <button class="btn btn-ghost" id="copyLink" type="button">Копировать ссылку</button>
+          <button class="btn btn-ghost" id="showGuests" type="button">Показать гостей</button>
+        </div>
+      </div>
+
+      <!-- Guests -->
+      <div class="guest-list" id="guestList" aria-live="polite"></div>
+
+      <!-- soft glitter -->
+      <div class="glitter" id="glitter" aria-hidden="true"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  // безопасные селекторы
+  const daysEl = document.getElementById('days');
+  const hoursEl = document.getElementById('hours');
+  const minutesEl = document.getElementById('minutes');
+  const secondsEl = document.getElementById('seconds');
+
+  const rsvpName = document.getElementById('rsvpName');
+  const rsvpGuests = document.getElementById('rsvpGuests');
+  const rsvpNote = document.getElementById('rsvpNote');
+  const rsvpSend = document.getElementById('rsvpSend');
+  const rsvpMaybe = document.getElementById('rsvpMaybe');
+  const rsvpMsg = document.getElementById('rsvpMsg');
+
+  const copyLinkBtn = document.getElementById('copyLink');
+  const showGuestsBtn = document.getElementById('showGuests');
+  const guestListBox = document.getElementById('guestList');
+
+  // TARGET DATE (точное время)
+  const target = new Date("2025-12-11T17:30:00").getTime();
+
+  function tick() {
+    const now = new Date();
+
+    // День до конца месяца
+const targetDate = new Date(2025, 11, 11); // месяц 11 = декабрь (0–11)
+const diffTime = targetDate - now; // разница в миллисекундах
+const remainingDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // переводим в дни
+
+
+    const h = now.getHours();
+    const m = now.getMinutes();
+    const s = now.getSeconds();
+
+    daysEl.textContent = String(remainingDays).padStart(2, '0');
+    hoursEl.textContent = String(h).padStart(2, '0');
+    minutesEl.textContent = String(m).padStart(2, '0');
+    secondsEl.textContent = String(s).padStart(2, '0');
+}
+
+tick();
+setInterval(tick, 1000);
+
+
+  // save to localStorage
+  function saveGuest(name, guests, note, maybe=false){
+    const arr = JSON.parse(localStorage.getItem('guestList')||'[]');
+    arr.push({
+      name: name,
+      guests: guests || "1",
+      note: note || "",
+      maybe: !!maybe,
+      time: new Date().toLocaleString()
+    });
+    localStorage.setItem('guestList', JSON.stringify(arr));
+  }
+
+  // feedback helper
+  function flashMessage(el, text, ok=true){
+    el.textContent = text;
+    el.style.opacity = '1';
+    setTimeout(()=>{ if(el) el.style.opacity='0.9'; }, 10);
+    // soft clear after short time
+    setTimeout(()=>{ if(el) el.textContent=''; }, 4200);
+  }
+
+  // rsvpSend handler
+  rsvpSend.addEventListener('click', ()=> {
+    const name = rsvpName.value.trim();
+    if(!name){ flashMessage(rsvpMsg, 'Введите имя, пожалуйста'); rsvpName.focus(); return; }
+    saveGuest(name, rsvpGuests.value.trim(), rsvpNote.value.trim(), false);
+    flashMessage(rsvpMsg, 'Спасибо! RSVP отправлен ');
+    // лёгкая очистка полей (оставляем имя чтобы можно было редактировать)
+    rsvpGuests.value = '';
+    rsvpNote.value = '';
+  });
+
+  rsvpMaybe.addEventListener('click', ()=>{
+    const name = rsvpName.value.trim();
+    if(!name){ flashMessage(rsvpMsg, 'Введите имя, пожалуйста'); rsvpName.focus(); return; }
+    saveGuest(name, rsvpGuests.value.trim(), rsvpNote.value.trim(), true);
+    flashMessage(rsvpMsg, 'Отмечено как «возможно»');
+    rsvpGuests.value = '';
+    rsvpNote.value = '';
+  });
+
+  // copy link
+  copyLinkBtn.addEventListener('click', async ()=>{
+    try{
+      await navigator.clipboard.writeText(window.location.href);
+      alert('Ссылка скопирована');
+    }catch(e){
+      prompt('Скопируйте ссылку вручную:', window.location.href);
+    }
+  });
+
+  // show guests
+  showGuestsBtn.addEventListener('click', ()=>{
+    const list = JSON.parse(localStorage.getItem('guestList')||'[]');
+    if(guestListBox.style.display === 'block'){ guestListBox.style.display='none'; return; }
+    guestListBox.style.display = 'block';
+    guestListBox.innerHTML = '<h4 style="margin:0 0 10px;color:var(--matte-gold)">Список гостей:</h4>';
+    if(list.length === 0){
+      guestListBox.innerHTML += '<div class="muted">Пока никого нет</div>';
+      return;
+    }
+    list.slice().reverse().forEach(g=>{
+      const div = document.createElement('div');
+      div.className = 'guest-item';
+      div.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center">
+          <div><b>${escapeHtml(g.name)}</b> ${g.maybe ? '<span style="opacity:.85;margin-left:8px">— возможно</span>' : ''}<div class="guest-meta" style="margin-top:6px">${g.guests} гостей · ${g.time}</div></div>
+        </div>
+        <div style="margin-top:6px;color:rgba(255,255,255,0.6);font-size:13px">${escapeHtml(g.note)}</div>`;
+      guestListBox.appendChild(div);
+    });
+  });
+
+  // small helper to escape HTML
+  function escapeHtml(s){
+    if(!s) return '';
+    return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
+  }
+
+  // glitter: subtle matte sparks
+  (function makeGlitter(){
+    const parent = document.getElementById('glitter');
+    if(!parent) return;
+    for(let i=0;i<18;i++){
+      const el = document.createElement('div');
+      el.className = 'spark';
+      el.style.left = Math.random()*100 + '%';
+      el.style.top = Math.random()*100 + '%';
+      const size = 3 + Math.random()*8;
+      el.style.width = size + 'px';
+      el.style.height = size + 'px';
+      el.style.opacity = 0.08 + Math.random()*0.12;
+      el.style.animationDuration = (5 + Math.random()*8) + 's';
+      parent.appendChild(el);
+    }
+  })();
+
+})();
+</script>
+
+</body>
+</html>
