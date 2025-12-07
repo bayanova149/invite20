@@ -1,358 +1,232 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Birthday party Aidana</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Birthday party Aidana</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&display=swap" rel="stylesheet">
 
-<style>
-:root{
-  --bg-1: #E6E6DF;
-  --matte-gold: #aa2a1f;
-  --gold-glow: rgba(170,42,31,0.14);
-  --radius: 16px;
-}
+  <style>
+    :root{
+      --bg-1: #E6E6DF;
+      --matte-gold: #aa2a1f;
+      --gold-glow: rgba(170,42,31,0.14);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;
+      font-family:'Playfair Display', serif;
+      background: var(--bg-1);
+      color:#111;
+    }
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px}
+    .invite{
+      max-width:760px;width:100%;background: var(--bg-1);
+      border-radius:20px;box-shadow:0 6px 18px #fff, 0 0 120px var(--gold-glow) inset;
+      padding:30px;position:relative;overflow:hidden;
+    }
 
-*{box-sizing:border-box}
+    /* hero */
+    .hero{text-align:center;position:relative;z-index:2}
+    .hero .logo{font-weight:700;font-size:18px;color:var(--matte-gold)}
+    .hero .title{font-size:42px;margin:6px 0;color:#111}
+    .hero .subtitle{font-size:15px;margin-bottom:14px}
+    .hero-image{
+      width:80%;max-width:350px;border-radius:16px;margin:0 auto 20px;
+      box-shadow:0 8px 24px rgba(230,230,223,0.5);display:block;
+    }
 
-html,body{
-  margin:0;
-  font-family:'Playfair Display', serif;
-  background: var(--bg-1);
-  color:#111;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
+    /* details */
+    .details{padding:18px;border-radius:12px;background:rgba(255,255,255,0.4);text-align:left}
+    .detail-row{display:flex;gap:12px;margin:10px 0}
+    .icon{
+      width:40px;height:40px;border-radius:10px;background:var(--matte-gold);
+      display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;
+    }
+    .muted{font-size:14px;color:#111}
+    .desc{margin-top:12px;line-height:1.45}
 
-.wrap{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:40px;
-}
+    /* instagram panel */
+    .insta-panel{
+      margin-top:20px;padding:16px;background:rgba(255,255,255,0.6);
+      border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    }
+    .insta-panel h3{color:var(--matte-gold);font-size:18px;margin-bottom:10px;text-align:center}
+    .insta-fallback{text-align:center;font-size:13px;margin-top:10px}
+    .insta-link{
+      display:inline-block;margin-top:6px;padding:8px 12px;border-radius:10px;
+      background:linear-gradient(90deg,var(--matte-gold), #c33b2d);color:#fff;font-size:13px;text-decoration:none;
+      transition:.25s;
+    }
+    .insta-link:hover{transform:translateY(-2px)}
 
-.invite{
-  max-width:760px;
-  width:100%;
-  background: var(--bg-1);
-  border-radius:20px;
-  box-shadow:0 6px 18px #fff, 0 0 120px var(--gold-glow) inset;
-  padding:30px;
-  position:relative;
-  overflow:hidden;
-}
+    /* countdown */
+    .countdown-title{margin-top:20px;font-size:16px;font-weight:700;color:var(--matte-gold);text-align:center}
+    .countdown{display:flex;gap:12px;justify-content:center;margin-top:10px}
+    .seg{background:rgba(255,255,255,0.5);padding:12px 14px;border-radius:10px;min-width:64px;text-align:center}
+    .num{font-size:20px;font-weight:800;color:var(--matte-gold)}
+    .lbl{font-size:11px;color:#111;letter-spacing:0.6px}
 
-/* hero */
-.hero{
-  position:relative;
-  z-index:2;
-  text-align:center;
-}
+    /* final note: text + kiss image side by side */
+    .final-note{
+      margin-top:40px;display:flex;align-items:center;justify-content:center;gap:12px;animation:fadeIn 2s ease;
+    }
+    .kiss-text{font-size:24px;font-weight:700;color:var(--matte-gold)}
+    .kiss-image{width:80px;height:auto;opacity:0.9;transform:rotate(-5deg)}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-.hero .logo{
-  font-weight:700;
-  font-size:18px;
-  color:var(--matte-gold);
-}
+    /* glitter background */
+    .glitter{position:absolute;inset:0;pointer-events:none;opacity:0.9;z-index:1}
+    .spark{
+      position:absolute;width:6px;height:6px;background:linear-gradient(45deg,#000000,var(--matte-gold));
+      opacity:0.14;border-radius:50%;filter:blur(1px);animation:float 7s linear infinite;
+    }
+    @keyframes float{
+      0%{transform:translateY(0) scale(0.6);opacity:0}
+      10%{opacity:1}
+      50%{transform:translateY(-220px) scale(1)}
+      100%{transform:translateY(20px);opacity:0}
+    }
 
-.hero .title{
-  font-size:42px;
-  margin:6px 0;
-  color:#111;
-}
-
-.hero .subtitle{
-  font-size:15px;
-  margin-bottom:14px;
-}
-
-.hero-image{
-  width:80%;
-  max-width:350px;
-  border-radius:16px;
-  margin:0 auto 20px;
-  box-shadow:0 8px 24px rgba(230,230,223,0.5);
-  display:block;
-}
-
-/* details */
-.details{
-  padding:18px;
-  border-radius:12px;
-  background:rgba(255,255,255,0.4);
-  text-align:left;
-}
-
-.detail-row{
-  display:flex;
-  gap:12px;
-  margin:10px 0;
-}
-
-.icon{
-  width:40px;
-  height:40px;
-  border-radius:10px;
-  background:var(--matte-gold);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#fff;
-  font-weight:700;
-}
-
-.muted{
-  font-size:14px;
-  color:#111;
-}
-
-.desc{
-  margin-top:12px;
-  line-height:1.45;
-}
-
-/* insta panel */
-.insta-panel{
-  margin-top:20px;
-  padding:16px;
-  background:rgba(255,255,255,0.6);
-  border-radius:14px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);
-}
-
-.insta-panel h3{
-  color:var(--matte-gold);
-  font-size:18px;
-  margin-bottom:10px;
-  text-align:center;
-}
-
-.insta-fallback{
-  margin-top:10px;
-  font-size:13px;
-  text-align:center;
-}
-
-.insta-link{
-  display:inline-block;
-  margin-top:6px;
-  padding:8px 12px;
-  border-radius:10px;
-  background:linear-gradient(90deg,var(--matte-gold), #c33b2d);
-  color:#fff;
-  font-size:13px;
-  text-decoration:none;
-  transition:0.25s;
-}
-
-.insta-link:hover{
-  transform:translateY(-2px);
-}
-
-/* countdown */
-.countdown-title{
-  margin-top:20px;
-  font-size:16px;
-  font-weight:700;
-  color:var(--matte-gold);
-  text-align:center;
-}
-
-.countdown{
-  display:flex;
-  gap:12px;
-  justify-content:center;
-  margin-top:10px;
-}
-
-.seg{
-  background:rgba(255,255,255,0.5);
-  padding:12px 14px;
-  border-radius:10px;
-  min-width:64px;
-  text-align:center;
-}
-
-.num{
-  font-size:20px;
-  font-weight:800;
-  color:var(--matte-gold);
-}
-
-.lbl{
-  font-size:11px;
-  color:#111;
-  letter-spacing:0.6px;
-}
-
-/* glitter background */
-.glitter{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  opacity:0.9;
-  z-index:1;
-}
-
-.spark{
-  position:absolute;
-  width:6px;
-  height:6px;
-  background:linear-gradient(45deg,#000000,var(--matte-gold));
-  opacity:0.14;
-  border-radius:50%;
-  filter:blur(1px);
-  animation:float 7s linear infinite;
-}
-
-@keyframes float{
-  0%{transform:translateY(0) scale(0.6);opacity:0}
-  10%{opacity:1}
-  50%{transform:translateY(-220px) scale(1)}
-  100%{transform:translateY(20px);opacity:0}
-}
-
-/* mobile */
-@media(max-width:540px){
-  .invite{padding:22px}
-  .hero .title{font-size:32px}
-  .hero-image{width:88%;max-width:320px}
-  .seg{min-width:56px;padding:10px 12px}
-}
-</style>
+    /* mobile */
+    @media(max-width:540px){
+      .invite{padding:22px}
+      .hero .title{font-size:32px}
+      .hero-image{width:88%;max-width:320px}
+      .seg{min-width:56px;padding:10px 12px}
+      .kiss-text{font-size:22px}
+      .kiss-image{width:70px}
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="invite">
+  <div class="wrap">
+    <div class="invite">
 
-    <!-- unified card -->
-    <div class="hero">
-      <img src="December.png" alt="Aidana" class="hero-image">
-      <div class="logo">Glam &amp; Glow</div>
-      <div class="title">Birthday party Aidana</div>
-      <div class="subtitle">Приглашаю на вечер стиля, блеска и хорошего настроения</div>
+      <div class="hero">
+        <img src="December.png" alt="Aidana" class="hero-image">
+        <div class="logo">Glam &amp; Glow</div>
+        <div class="title">Birthday party Aidana</div>
+        <div class="subtitle">Приглашаю на вечер стиля, блеска и хорошего настроения</div>
 
-      <div class="details">
-        <div class="detail-row">
-          <div class="icon">📍</div>
-          <div>
-            <div class="muted">Место</div>
-            <div style="font-weight:700">Da Vinci — Проспект Нурсултана Назарбаева, 21, Караганда</div>
+        <div class="details">
+          <div class="detail-row">
+            <div class="icon">📍</div>
+            <div>
+              <div class="muted">Место</div>
+              <div style="font-weight:700">Da Vinci — Проспект Нурсултана Назарбаева, 21, Караганда</div>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="icon">📅</div>
+            <div>
+              <div class="muted">Дата</div>
+              <div style="font-weight:700">11 декабря 2025</div>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="icon">⏰</div>
+            <div>
+              <div class="muted">Время</div>
+              <div style="font-weight:700">17:00</div>
+            </div>
+          </div>
+          <p class="desc">Dress code: блеск, шик и уверенность — твой главный аксессуар.</p>
+          <p class="desc">Прошу написать письмо имениннице — главное искренность 💌</p>
+
+          <!-- Instagram panel -->
+          <div class="insta-panel">
+            <h3>Instagram кафе Da Vinci</h3>
+            <iframe src="https://www.instagram.com/da_vinci_restobar/embed"
+                    width="100%" height="400"
+                    style="border:none;overflow:hidden;border-radius:12px"
+                    allowtransparency="true"></iframe>
+            <div class="insta-fallback">
+              Если лента не загрузилась, откройте профиль:
+              <br>
+              <a class="insta-link" href="https://www.instagram.com/da_vinci_restobar" target="_blank" rel="noopener">Открыть Instagram</a>
+            </div>
           </div>
         </div>
 
-        <div class="detail-row">
-          <div class="icon">📅</div>
-          <div>
-            <div class="muted">Дата</div>
-            <div style="font-weight:700">11 декабря 2025</div>
-          </div>
+        <!-- Countdown -->
+        <div class="countdown-title">До праздника осталось</div>
+        <div class="countdown" aria-live="polite">
+          <div class="seg"><div class="num" id="days">00</div><div class="lbl">Дней</div></div>
+          <div class="seg"><div class="num" id="hours">00</div><div class="lbl">Часов</div></div>
+          <div class="seg"><div class="num" id="minutes">00</div><div class="lbl">Минут</div></div>
+          <div class="seg"><div class="num" id="seconds">00</div><div class="lbl">Сек</div></div>
         </div>
 
-        <div class="detail-row">
-          <div class="icon">⏰</div>
-          <div>
-            <div class="muted">Время</div>
-            <div style="font-weight:700">17:00</div>
-          </div>
-        </div>
-
-        <p class="desc">Dress code: блеск, шик и уверенность — твой главный аксессуар.</p>
-        <p class="desc">Прошу написать письмо имениннице — главное искренность 💌</p>
-
-        <!-- Instagram panel under "place" -->
-        <div class="insta-panel">
-          <h3>Instagram кафе Da Vinci</h3>
-          <!-- Прямой embed профиля может блокироваться — оставим iframe и fallback-кнопку -->
-          <iframe src="https://www.instagram.com/da_vinci_restobar/embed"
-                  width="100%" height="400"
-                  style="border:none;overflow:hidden;border-radius:12px"
-                  allowtransparency="true"></iframe>
-          <div class="insta-fallback">
-            Если лента не загрузилась, откройте профиль по кнопке:
-            <br>
-            <a class="insta-link" href="https://www.instagram.com/da_vinci_restobar" target="_blank" rel="noopener">
-              Открыть Instagram Da Vinci
-            </a>
-          </div>
+        <!-- Final note: text + kiss image side by side -->
+        <div class="final-note">
+          <p class="kiss-text">Жду вас</p>
+          <img src="kiss.png" alt="kiss" class="kiss-image">
         </div>
       </div>
 
-      <!-- Countdown -->
-      <div class="countdown-title">До праздника осталось</div>
-      <div class="countdown" aria-live="polite">
-        <div class="seg"><div class="num" id="days">00</div><div class="lbl">Дня</div></div>
-        <div class="seg"><div class="num" id="hours">00</div><div class="lbl">Часов</div></div>
-        <div class="seg"><div class="num" id="minutes">00</div><div class="lbl">Минут</div></div>
-        <div class="seg"><div class="num" id="seconds">00</div><div class="lbl">Сек</div></div>
-      </div>
+      <!-- glitter background -->
+      <div class="glitter" id="glitter" aria-hidden="true"></div>
+
     </div>
-
-    <!-- glitter background -->
-    <div class="glitter" id="glitter" aria-hidden="true"></div>
-
   </div>
-</div>
 
-<script>
-(function(){
-  // countdown
-  const daysEl = document.getElementById('days');
-  const hoursEl = document.getElementById('hours');
-  const minutesEl = document.getElementById('minutes');
-  const secondsEl = document.getElementById('seconds');
+  <script>
+    (function(){
+      // countdown
+      const daysEl = document.getElementById('days');
+      const hoursEl = document.getElementById('hours');
+      const minutesEl = document.getElementById('minutes');
+      const secondsEl = document.getElementById('seconds');
 
-  // дата: 11 декабря 2025, 17:00 по локальному времени
-  const target = new Date("2025-12-11T17:00:00").getTime();
+      // 11 декабря 2025, 17:00 локально
+      const target = new Date("2025-12-11T17:00:00").getTime();
+      const pad2 = n => String(n).padStart(2,'0');
 
-  function pad2(n){ return String(n).padStart(2,'0'); }
+      function tick(){
+        const now = Date.now();
+        const diff = target - now;
 
-  function tick(){
-    const now = Date.now();
-    const diff = target - now;
+        if(diff <= 0){
+          daysEl.textContent = "00";
+          hoursEl.textContent = "00";
+          minutesEl.textContent = "00";
+          secondsEl.textContent = "00";
+          return;
+        }
 
-    if(diff <= 0){
-      daysEl.textContent = "00";
-      hoursEl.textContent = "00";
-      minutesEl.textContent = "00";
-      secondsEl.textContent = "00";
-      return;
-    }
+        const d = Math.floor(diff / (1000*60*60*24));
+        const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+        const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+        const s = Math.floor((diff % (1000*60)) / 1000);
 
-    const d = Math.floor(diff / (1000*60*60*24));
-    const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-    const m = Math.floor((diff % (1000*60*60)) / (1000*60));
-    const s = Math.floor((diff % (1000*60)) / 1000);
+        daysEl.textContent = pad2(d);
+        hoursEl.textContent = pad2(h);
+        minutesEl.textContent = pad2(m);
+        secondsEl.textContent = pad2(s);
+      }
 
-    daysEl.textContent = pad2(d);
-    hoursEl.textContent = pad2(h);
-    minutesEl.textContent = pad2(m);
-    secondsEl.textContent = pad2(s);
-  }
+      tick();
+      setInterval(tick, 1000);
 
-  tick();
-  setInterval(tick, 1000);
-
-  // glitter (sparks)
-  const parent = document.getElementById('glitter');
-  if(parent){
-    for(let i=0;i<22;i++){
-      const el = document.createElement('div');
-      el.className = 'spark';
-      el.style.left = (Math.random()*100).toFixed(2) + '%';
-      el.style.top = (Math.random()*100).toFixed(2) + '%';
-      const size = 3 + Math.random()*8;
-      el.style.width = size + 'px';
-      el.style.height = size + 'px';
-      el.style.opacity = (0.08 + Math.random()*0.12).toFixed(2);
-      el.style.animationDuration = (5 + Math.random()*8).toFixed(2) + 's';
-      parent.appendChild(el);
-    }
-  }
-})();
-</script>
+      // glitter (sparks)
+      const parent = document.getElementById('glitter');
+      if(parent){
+        for(let i=0;i<22;i++){
+          const el = document.createElement('div');
+          el.className = 'spark';
+          el.style.left = (Math.random()*100).toFixed(2) + '%';
+          el.style.top = (Math.random()*100).toFixed(2) + '%';
+          const size = 3 + Math.random()*8;
+          el.style.width = size + 'px';
+          el.style.height = size + 'px';
+          el.style.opacity = (0.08 + Math.random()*0.12).toFixed(2);
+          el.style.animationDuration = (5 + Math.random()*8).toFixed(2) + 's';
+          parent.appendChild(el);
+        }
+      }
+    })();
+  </script>
 </body>
 </html>
