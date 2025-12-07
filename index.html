@@ -47,13 +47,22 @@
     .muted{font-size:14px;color:#111}
     .desc{margin-top:12px;line-height:1.45}
 
-    /* instagram panel (compact for mobile) */
+    /* instagram panel */
     .insta-panel{
       margin-top:20px;padding:14px;background:rgba(255,255,255,0.6);
       border-radius:14px;box-shadow:none;
+      transition:all 0.3s ease;
     }
     .insta-panel h3{
       color:var(--matte-gold);font-size:17px;margin-bottom:8px;text-align:center;
+    }
+    .insta-frame{
+      width:100%;
+      height:380px;
+      border:none;
+      overflow:hidden;
+      border-radius:12px;
+      transition:all 0.3s ease;
     }
     .insta-fallback{text-align:center;font-size:13px;margin-top:10px}
     .insta-link{
@@ -103,6 +112,23 @@
       .seg{min-width:56px;padding:10px 12px}
       .kiss-text{font-size:22px}
       .kiss-image{width:70px}
+
+      .insta-panel{
+        margin-left:-10px;
+        margin-right:-10px;
+        border-radius:0;
+      }
+      .insta-frame{
+        height:500px;
+        border-radius:0;
+      }
+      .insta-panel h3{
+        font-size:18px;
+      }
+      .insta-link{
+        font-size:15px;
+        padding:12px 16px;
+      }
     }
   </style>
 </head>
@@ -145,8 +171,7 @@
           <div class="insta-panel">
             <h3>Instagram кафе Da Vinci</h3>
             <iframe src="https://www.instagram.com/da_vinci_restobar/embed"
-                    width="100%" height="280"
-                    style="border:none;overflow:hidden;border-radius:12px"
+                    class="insta-frame"
                     allowtransparency="true"></iframe>
             <div class="insta-fallback">
               <p>Если лента не загрузилась, откройте профиль:</p>
