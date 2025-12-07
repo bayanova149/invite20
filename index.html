@@ -47,19 +47,19 @@
     .muted{font-size:14px;color:#111}
     .desc{margin-top:12px;line-height:1.45}
 
-    /* instagram panel */
+    /* instagram panel (compact for mobile) */
     .insta-panel{
-      margin-top:20px;padding:16px;background:rgba(255,255,255,0.6);
-      border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,0.1);
+      margin-top:20px;padding:14px;background:rgba(255,255,255,0.6);
+      border-radius:14px;box-shadow:none;
     }
-    .insta-panel h3{color:var(--matte-gold);font-size:18px;margin-bottom:10px;text-align:center}
+    .insta-panel h3{
+      color:var(--matte-gold);font-size:17px;margin-bottom:8px;text-align:center;
+    }
     .insta-fallback{text-align:center;font-size:13px;margin-top:10px}
     .insta-link{
       display:inline-block;margin-top:6px;padding:8px 12px;border-radius:10px;
-      background:linear-gradient(90deg,var(--matte-gold), #c33b2d);color:#fff;font-size:13px;text-decoration:none;
-      transition:.25s;
+      background:var(--matte-gold);color:#fff;font-size:13px;text-decoration:none;
     }
-    .insta-link:hover{transform:translateY(-2px)}
 
     /* countdown */
     .countdown-title{margin-top:20px;font-size:16px;font-weight:700;color:var(--matte-gold);text-align:center}
@@ -139,12 +139,11 @@
           <div class="insta-panel">
             <h3>Instagram кафе Da Vinci</h3>
             <iframe src="https://www.instagram.com/da_vinci_restobar/embed"
-                    width="100%" height="400"
+                    width="100%" height="280"
                     style="border:none;overflow:hidden;border-radius:12px"
                     allowtransparency="true"></iframe>
             <div class="insta-fallback">
-              Если лента не загрузилась, откройте профиль:
-              <br>
+              <p>Если лента не загрузилась, откройте профиль:</p>
               <a class="insta-link" href="https://www.instagram.com/da_vinci_restobar" target="_blank" rel="noopener">Открыть Instagram</a>
             </div>
           </div>
@@ -161,72 +160,12 @@
 
         <!-- Final note: text + kiss image side by side -->
         <div class="final-note">
-          <p class="kiss-text">Жду вас</p>
-          <img src="kiss.png" alt="kiss" class="kiss-image">
+          <div class="kiss-text">Жду тебя! </div>
+          <img src="kiss.png" alt="Kiss" class="kiss-image">
         </div>
       </div>
-
-      <!-- glitter background -->
-      <div class="glitter" id="glitter" aria-hidden="true"></div>
-
-    </div>
+    </div>            
   </div>
-
-  <script>
-    (function(){
-      // countdown
-      const daysEl = document.getElementById('days');
-      const hoursEl = document.getElementById('hours');
-      const minutesEl = document.getElementById('minutes');
-      const secondsEl = document.getElementById('seconds');
-
-      // 11 декабря 2025, 17:00 локально
-      const target = new Date("2025-12-11T17:00:00").getTime();
-      const pad2 = n => String(n).padStart(2,'0');
-
-      function tick(){
-        const now = Date.now();
-        const diff = target - now;
-
-        if(diff <= 0){
-          daysEl.textContent = "00";
-          hoursEl.textContent = "00";
-          minutesEl.textContent = "00";
-          secondsEl.textContent = "00";
-          return;
-        }
-
-        const d = Math.floor(diff / (1000*60*60*24));
-        const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-        const m = Math.floor((diff % (1000*60*60)) / (1000*60));
-        const s = Math.floor((diff % (1000*60)) / 1000);
-
-        daysEl.textContent = pad2(d);
-        hoursEl.textContent = pad2(h);
-        minutesEl.textContent = pad2(m);
-        secondsEl.textContent = pad2(s);
-      }
-
-      tick();
-      setInterval(tick, 1000);
-
-      // glitter (sparks)
-      const parent = document.getElementById('glitter');
-      if(parent){
-        for(let i=0;i<22;i++){
-          const el = document.createElement('div');
-          el.className = 'spark';
-          el.style.left = (Math.random()*100).toFixed(2) + '%';
-          el.style.top = (Math.random()*100).toFixed(2) + '%';
-          const size = 3 + Math.random()*8;
-          el.style.width = size + 'px';
-          el.style.height = size + 'px';
-          el.style.opacity = (0.08 + Math.random()*0.12).toFixed(2);
-          el.style.animationDuration = (5 + Math.random()*8).toFixed(2) + 's';
-          parent.appendChild(el);
-        }
-      }
-    })();
-  </script>
 </body>
-</html>
+</html> 
+
