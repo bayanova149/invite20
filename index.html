@@ -122,10 +122,11 @@ html,body{
 .num{font-size:20px;font-weight:800;color:var(--matte-gold)}
 .lbl{font-size:11px;color:#111;letter-spacing:0.6px}
 
-/* RSVP form: оставить только имя и комментарий */
+/* RSVP form */
 .rsvp{display:flex;flex-direction:column;gap:10px;margin-top:6px}
 .input{padding:12px;border-radius:10px;border:1px solid rgba(0,0,0,0.03);background:transparent;color:#111;font-size:14px;outline:none}
 .input::placeholder{color:rgba(0,0,0,0.45)}
+.row{display:flex;gap:8px}
 .btn{padding:10px 16px;border-radius:999px;border:0;cursor:pointer;font-weight:700;font-family:'Playfair Display', serif;transition:var(--transition)}
 .btn-primary{
   background:linear-gradient(180deg,var(--matte-gold),var(--accent-strong));
@@ -134,7 +135,22 @@ html,body{
   transform:translateY(0);
 }
 .btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(170,42,31,0.12)}
+.btn-ghost{background:transparent;border:1px solid rgba(0,0,0,0.04);color:#111}
 .small-muted{font-size:13px;color:#111;margin-top:6px}
+
+/* guest list */
+.guest-list{margin-top:16px;padding:12px;background:rgba(255, 255, 255, 0.015);border-radius:10px;display:none;max-height:280px;overflow:auto;border:1px solid rgba(0,0,0,0.02)}
+.guest-item{padding:8px 6px;border-bottom:1px solid rgba(252, 252, 252, 0.02)}
+.guest-item:last-child{border-bottom:0}
+.guest-meta{font-size:12px;color:#111}
+
+/* glitter */
+.glitter{position:absolute;inset:0;pointer-events:none;opacity:0.9}
+.spark{position:absolute;width:6px;height:6px;background:linear-gradient(45deg,#000000,var(--matte-gold));opacity:0.14;border-radius:50%;filter:blur(1px);animation:float 7s linear infinite}
+@keyframes float{0%{transform:translateY(0) scale(0.6);opacity:0}10%{opacity:1}50%{transform:translateY(-220px) scale(1)}100%{transform:translateY(20px);opacity:0}}
+
+@media(max-width:980px){.invite{grid-template-columns:1fr;max-width:760px}.panel{order:2}}
+@media(max-width:540px){.title{font-size:28px}.panel{padding:14px}.invite{padding:18px}}
 </style>
 </head>
 
@@ -148,6 +164,7 @@ html,body{
       <div class="logo">Glam &amp; Glow</div>
       <div class="title">Birthday party Aidana</div>
       <div class="subtitle">Приглашаю на вечер стиля, блеска и хорошего настроения</div>
+
       <div class="details">
         <div class="detail-row">
           <div class="icon">📍</div>
@@ -175,7 +192,7 @@ html,body{
         </div>
 
         <p class="desc">Dress code: блеск, шик и уверенность — твой главный аксессуар. Атмосфера обещает быть уютной и праздничной.</p>
-        <p class="desc">Напиши, пожалуйста, письмо именинице. Главное — искренность!</p>
+        <p class="desc">Но! В дополнение прошу написать письмо именинице. Содержание на твоё усмотрение, главное — искренность</p>
       </div>
     </div>
 
@@ -194,14 +211,25 @@ html,body{
         <div class="seg"><div class="num" id="seconds">00</div><div class="lbl">Сек</div></div>
       </div>
 
-      <!-- RSVP FORM: только имя и комментарий -->
+      <!-- RSVP FORM -->
       <div class="rsvp" role="form" aria-label="RSVP форма">
         <input class="input" id="rsvpName" placeholder="Ваше имя" autocomplete="name" />
+        <input class="input" id="rsvpGuests" placeholder="Количество гостей" inputmode="numeric" />
         <textarea class="input" id="rsvpNote" rows="3" placeholder="Комментарий (по желанию)"></textarea>
         <div style="display:flex;gap:10px;margin-top:6px">
           <button class="btn btn-primary" id="rsvpSend" type="button">Отправить</button>
+          <button class="btn btn-ghost" id="rsvpMaybe" type="button">Возможно приду</button>
         </div>
         <div class="small-muted" id="rsvpMsg" aria-live="polite" style="min-height:20px"></div>
+      </div>
+
+      <!-- Extra controls -->
+      <div style="margin-top:14px">
+        <div class="small-muted">Дополнительно</div>
+        <div style="display:flex;gap:10px;margin-top:8px">
+          <button class="btn btn-ghost" id="copyLink" type="button">Копировать ссылку</button>
+          <button class="btn btn-ghost" id="showGuests" type="button">Показать гостей</button>
+        </div>
       </div>
 
       <!-- Glitter -->
@@ -213,17 +241,23 @@ html,body{
 
 <script>
 (function(){
+  // Countdown
   const daysEl = document.getElementById('days');
   const hoursEl = document.getElementById('hours');
   const minutesEl = document.getElementById('minutes');
   const secondsEl = document.getElementById('seconds');
 
   const rsvpName = document.getElementById('rsvpName');
+  const rsvpGuests = document.getElementById('rsvpGuests');
   const rsvpNote = document.getElementById('rsvpNote');
   const rsvpSend = document.getElementById('rsvpSend');
+  const rsvpMaybe = document.getElementById('rsvpMaybe');
   const rsvpMsg = document.getElementById('rsvpMsg');
+  const copyLinkBtn = document.getElementById('copyLink');
+  const showGuestsBtn = document.getElementById('showGuests');
+  const guestListBox = document.getElementById('guestList');
 
-  const targetDate = new Date(2025,11,11,17,30,0); 
+  const targetDate = new Date(2025,11,11,17,30,0); // 11 декабря 2025 17:30
 
   function tick(){
     const now = new Date();
@@ -240,9 +274,10 @@ html,body{
   }
   tick(); setInterval(tick,1000);
 
-  function saveGuest(name, note){
+  // Save RSVP
+  function saveGuest(name, guests, note, maybe=false){
     const arr = JSON.parse(localStorage.getItem('guestList')||'[]');
-    arr.push({name, note: note||"", time:new Date().toLocaleString()});
+    arr.push({name, guests: guests||"1", note: note||"", maybe:!!maybe, time:new Date().toLocaleString()});
     localStorage.setItem('guestList', JSON.stringify(arr));
   }
 
@@ -256,30 +291,34 @@ html,body{
   rsvpSend.addEventListener('click',()=>{
     const name = rsvpName.value.trim();
     if(!name){ flashMessage(rsvpMsg,'Введите имя, пожалуйста'); rsvpName.focus(); return;}
-    saveGuest(name,rsvpNote.value.trim());
+    saveGuest(name,rsvpGuests.value.trim(),rsvpNote.value.trim(),false);
     flashMessage(rsvpMsg,'Спасибо! RSVP отправлен');
-    rsvpNote.value='';
+    rsvpGuests.value=''; rsvpNote.value='';
   });
 
-  (function makeGlitter(){
-    const parent = document.getElementById('glitter');
-    if(!parent) return;
-    for(let i=0;i<18;i++){
-      const el = document.createElement('div');
-      el.className = 'spark';
-      el.style.left = Math.random()*100 + '%';
-      el.style.top = Math.random()*100 + '%';
-      const size = 3 + Math.random()*8;
-      el.style.width = size + 'px';
-      el.style.height = size + 'px';
-      el.style.opacity = 0.08 + Math.random()*0.12;
-      el.style.animationDuration = (5 + Math.random()*8) + 's';
-      parent.appendChild(el);
+  rsvpMaybe.addEventListener('click', ()=>{
+    const name = rsvpName.value.trim();
+    if(!name){ flashMessage(rsvpMsg, 'Введите имя, пожалуйста'); rsvpName.focus(); return; }
+    saveGuest(name, rsvpGuests.value.trim(), rsvpNote.value.trim(), true);
+    flashMessage(rsvpMsg, 'Отмечено как «возможно»');
+    rsvpGuests.value = '';
+    rsvpNote.value = '';
+  });
+
+  // copy link
+  copyLinkBtn.addEventListener('click', async ()=>{
+    try{
+      await navigator.clipboard.writeText(window.location.href);
+      alert('Ссылка скопирована');
+    }catch(e){
+      prompt('Скопируйте ссылку вручную:', window.location.href);
     }
-  })();
+  });
 
-})();
-</script>
+  // show guests
+  showGuestsBtn.addEventListener('click', ()=>{
+    const list = JSON.parse(localStorage.getItem('guestList')||'[]');
+    if(guestListBox.style.display === 'block'){ guestListBox.style.display='none'; return; }
+    guestListBox.style.display = 'block';
+    guest
 
-</body>
-</html>
