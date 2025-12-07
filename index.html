@@ -322,3 +322,75 @@ html,body{
     guestListBox.style.display = 'block';
     guest
 
+    
+  rsvpMaybe.addEventListener('click', ()=>{
+    const name = rsvpName.value.trim();
+    if(!name){ flashMessage(rsvpMsg, 'Введите имя, пожалуйста'); rsvpName.focus(); return; }
+    saveGuest(name, rsvpGuests.value.trim(), rsvpNote.value.trim(), true);
+    flashMessage(rsvpMsg, 'Отмечено как «возможно»');
+    rsvpGuests.value = '';
+    rsvpNote.value = '';
+  });
+
+  // copy link
+  copyLinkBtn.addEventListener('click', async ()=>{
+    try{
+      await navigator.clipboard.writeText(window.location.href);
+      alert('Ссылка скопирована');
+    }catch(e){
+      prompt('Скопируйте ссылку вручную:', window.location.href);
+    }
+  });
+
+  // show guests
+  showGuestsBtn.addEventListener('click', ()=>{
+    const list = JSON.parse(localStorage.getItem('guestList')||'[]');
+    if(guestListBox.style.display === 'block'){ guestListBox.style.display='none'; return; }
+    guestListBox.style.display = 'block';
+    guestListBox.innerHTML = '<h4 style="margin:0 0 10px;color:var(--matte-gold)">Список гостей:</h4>';
+    if(list.length === 0){
+      guestListBox.innerHTML += '<div class="muted">Пока никого нет</div>';
+      return;
+    }
+    list.slice().reverse().forEach(g=>{
+      const div = document.createElement('div');
+      div.className = 'guest-item';
+      div.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center">
+          <div><b>${escapeHtml(g.name)}</b> ${g.maybe ? '<span style="opacity:.85;margin-left:8px">— возможно</span>' : ''}<div class="guest-meta" style="margin-top:6px">${g.guests} гостей · ${g.time}</div></div>
+        </div>
+        <div style="margin-top:6px;color:rgba(255,255,255,0.6);font-size:13px">${escapeHtml(g.note)}</div>`;
+      guestListBox.appendChild(div);
+    });
+  });
+
+  // small helper to escape HTML
+  function escapeHtml(s){
+    if(!s) return '';
+    return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
+  }
+
+  // glitter: subtle matte sparks
+  (function makeGlitter(){
+    const parent = document.getElementById('glitter');
+    if(!parent) return;
+    for(let i=0;i<18;i++){
+      const el = document.createElement('div');
+      el.className = 'spark';
+      el.style.left = Math.random()*100 + '%';
+      el.style.top = Math.random()*100 + '%';
+      const size = 3 + Math.random()*8;
+      el.style.width = size + 'px';
+      el.style.height = size + 'px';
+      el.style.opacity = 0.08 + Math.random()*0.12;
+      el.style.animationDuration = (5 + Math.random()*8) + 's';
+      parent.appendChild(el);
+    }
+  })();
+
+})();
+</script>
+
+</body>
+</html>
+
+
