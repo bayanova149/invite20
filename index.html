@@ -53,7 +53,6 @@
   .lbl{font-size:10px !important;}
   .input{padding:10px !important;font-size:14px !important;}
   .btn{padding:10px 12px !important;font-size:14px !important;}
-  .guest-list{max-height:200px !important;}
 }
 
 *{box-sizing:border-box}
@@ -112,17 +111,6 @@ html,body{
   overflow:hidden;
 }
 
-.panel:before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  border-radius:16px;
-  pointer-events:none;
-  background:linear-gradient(90deg, transparent, rgba(0,0,0,0.25));
-  box-shadow: 0 0 40px var(--gold-glow);
-  mask: linear-gradient(#000 0 0);
-}
-
 /* заголовок панели */
 .panel .heading{display:flex;flex-direction:column;align-items:center;margin-bottom:12px}
 .panel .heading .small{font-size:13px;color:var(--matte-gold);font-weight:700}
@@ -134,7 +122,7 @@ html,body{
 .num{font-size:20px;font-weight:800;color:var(--matte-gold)}
 .lbl{font-size:11px;color:#111;letter-spacing:0.6px}
 
-/* RSVP form: только имя и комментарий */
+/* RSVP form: оставить только имя и комментарий */
 .rsvp{display:flex;flex-direction:column;gap:10px;margin-top:6px}
 .input{padding:12px;border-radius:10px;border:1px solid rgba(0,0,0,0.03);background:transparent;color:#111;font-size:14px;outline:none}
 .input::placeholder{color:rgba(0,0,0,0.45)}
