@@ -77,16 +77,22 @@
     @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
     /* glitter background (sparks) */
-    .glitter{position:absolute;inset:0;pointer-events:none;opacity:0.9;z-index:1}
+    .glitter{
+      position:absolute;inset:0;pointer-events:none;opacity:0.9;z-index:1;
+      overflow:hidden;
+    }
     .spark{
-      position:absolute;width:6px;height:6px;background:linear-gradient(45deg,#000000,var(--matte-gold));
-      opacity:0.14;border-radius:50%;filter:blur(1px);animation:float 7s linear infinite;
+      position:absolute;border-radius:50%;
+      background:linear-gradient(45deg,#000,var(--matte-gold));
+      filter:blur(1px);
+      will-change:transform, opacity;
+      animation:float 7s linear infinite;
     }
     @keyframes float{
-      0%{transform:translateY(0) scale(0.6);opacity:0}
-      10%{opacity:1}
-      50%{transform:translateY(-220px) scale(1)}
-      100%{transform:translateY(20px);opacity:0}
+      0%{transform:translateY(20px) scale(0.6);opacity:0}
+      10%{opacity:0.25}
+      50%{transform:translateY(-220px) scale(1);opacity:0.18}
+      100%{transform:translateY(40px) scale(0.8);opacity:0}
     }
 
     /* mobile */
@@ -173,19 +179,19 @@
 
   <script>
     (function(){
-      // Countdown logic
+      // Safe countdown: avoid string parsing issues on mobile
       const daysEl = document.getElementById('days');
       const hoursEl = document.getElementById('hours');
       const minutesEl = document.getElementById('minutes');
       const secondsEl = document.getElementById('seconds');
 
-      // 11 декабря 2025, 17:00 локально
-      const target = new Date("2025-12-11T17:00:00").getTime();
+      // Date(year, monthIndex, day, hours, minutes, seconds) — monthIndex: 0=Jan, 11=Dec
+      const targetDate = new Date(2025, 11, 11, 17, 0, 0).getTime();
       const pad2 = n => String(n).padStart(2,'0');
 
-      function tick(){
+      function updateCountdown(){
         const now = Date.now();
-        const diff = target - now;
+        const diff = targetDate - now;
 
         if(diff <= 0){
           daysEl.textContent = "00";
@@ -206,27 +212,29 @@
         secondsEl.textContent = pad2(s);
       }
 
-      tick();
-      setInterval(tick, 1000);
+      // Start countdown
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
 
-      // Glitter (sparks) generator
+      // Glitter (sparks) generator — robust for mobile
       const parent = document.getElementById('glitter');
       if(parent){
-        const COUNT = 24;
+        const COUNT = 28;
         for(let i=0;i<COUNT;i++){
           const el = document.createElement('div');
           el.className = 'spark';
-          // random start positions
-          el.style.left = (Math.random()*100).toFixed(2) + '%';
-          el.style.top = (Math.random()*100).toFixed(2) + '%';
-          // random size and opacity
-          const size = 3 + Math.random()*8;
+
+          const size = 3 + Math.random()*7; // smaller for mobile
           el.style.width = size + 'px';
           el.style.height = size + 'px';
-          el.style.opacity = (0.08 + Math.random()*0.16).toFixed(2);
-          // random animation duration and slight delay
-          el.style.animationDuration = (5 + Math.random()*8).toFixed(2) + 's';
-          el.style.animationDelay = (Math.random()*3).toFixed(2) + 's';
+
+          el.style.left = (Math.random()*100).toFixed(2) + '%';
+          el.style.top = (Math.random()*100).toFixed(2) + '%';
+
+          el.style.opacity = (0.1 + Math.random()*0.15).toFixed(2);
+          el.style.animationDuration = (5.5 + Math.random()*6.5).toFixed(2) + 's';
+          el.style.animationDelay = (Math.random()*2).toFixed(2) + 's';
+
           parent.appendChild(el);
         }
       }
@@ -234,4 +242,3 @@
   </script>
 </body>
 </html>
-
